@@ -1,0 +1,6 @@
+name: Replica
+version: '${project.version}'
+main: dev.blockeed.replica.ReplicaPlugin
+api-version: '1.18'
+authors: [blockeed]
+dependencies: [CommandAPI]

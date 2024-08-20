@@ -1,0 +1,25 @@
+scoreboards:
+  WAITING:
+    title: "&a&lREPLICA"
+    lines:
+      - "  &7%date%"
+      - ""
+      - "&fJátékosok: &a%onlinePlayers%"
+      - ""
+      - "&fHátralévő idő: &a%time%"
+      - ""
+      - "&a  blockeed.dev"
+  INGAME:
+    title: "&a&lREPLICA"
+    lines:
+      - "  &7%date%"
+      - ""
+      - "&fKör vége: &7%time%"
+      - ""
+      - "&a● %island0%"
+      - "&a● %island1%"
+      - "&a● %island2%"
+      - "&a● %island3%"
+      - "&a● %island4%"
+      - ""
+      - "&a  blockeed.dev"

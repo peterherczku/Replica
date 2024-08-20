@@ -1,0 +1,16 @@
+titles:
+  SUCCESSFULLY_COMPLETED_THE_IMAGE:
+    title: "&a&lGratulálunk"
+    subtitle: "&fBefejezted a kép másolását!"
+  ROUND_HAS_ENDED:
+    title: "&eKör vége"
+    subtitle: "&fVégét ért ez a kör!"
+  ROLLING_NEXT_IMAGE:
+    title: "&e%time%"
+    subtitle: "&fKövetkező kép sorsolása..."
+  ROUND_HAS_STARTED:
+    title: "&a"
+    subtitle: "&7Rakd ki a képet!"
+  PLAYER_WON_THE_ARENA:
+    title: "&a&l%player%"
+    subtitle: "&fMegnyerte az arénát!"

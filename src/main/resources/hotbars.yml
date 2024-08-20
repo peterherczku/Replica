@@ -1,0 +1,27 @@
+hotbars:
+  LOBBY:
+    items:
+      LEAVE:
+        itemType: LEAVE
+        material: BARRIER
+        displayname: "&c&lKilépés"
+        lore:
+          - ""
+          - "&7Ezzel az itemmel"
+          - "&7tudod elhagyni az"
+          - "&7arénát."
+          - ""
+          - "&cKlikk &fAréna elhagyása"
+  SPECTATOR:
+    items:
+      LEAVE:
+        itemType: LEAVE
+        material: BARRIER
+        displayname: "&c&lKilépés"
+        lore:
+          - ""
+          - "&7Ezzel az itemmel"
+          - "&7tudod elhagyni az"
+          - "&7arénát."
+          - ""
+          - "&cKlikk &fAréna elhagyása"
