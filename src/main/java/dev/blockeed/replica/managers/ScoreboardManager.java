@@ -2,6 +2,8 @@ package dev.blockeed.replica.managers;
 
 
 import dev.blockeed.replica.ReplicaPlugin;
+import dev.blockeed.replica.entities.game.states.BuildingState;
+import dev.blockeed.replica.entities.game.states.LobbyState;
 import dev.blockeed.replica.entities.game.states.WaitingState;
 import dev.blockeed.replica.enums.ConfigType;
 import dev.blockeed.replica.enums.ScoreboardType;
@@ -44,7 +46,7 @@ public class ScoreboardManager {
 
     public static void addToScoreboard(Player player) {
         FastBoard fastBoard = new FastBoard(player);
-        fastBoard.updateTitle("§c§lBedWars");
+        fastBoard.updateTitle("§a§lREPLICA");
         boards.put(player.getUniqueId(), fastBoard);
     }
 
@@ -69,42 +71,52 @@ public class ScoreboardManager {
                         return;
                     }
 
-                    if (GameManager.getCurrentState() instanceof WaitingState) {
-                        fastBoard.updateTitle(getWaitingTitle());
-                        fastBoard.updateLines(getWaitingLines());
+                    if (GameManager.getCurrentState() instanceof LobbyState) {
+                        fastBoard.updateTitle(getLobbyTitle());
+                        fastBoard.updateLines(getLobbyLines());
                         return;
                     }
 
-                    fastBoard.updateTitle(getIngameTitle());
-                    fastBoard.updateLines(getIngameLines(Bukkit.getPlayer(uuid)));
+                    if (GameManager.getCurrentState() instanceof WaitingState) {
+                        fastBoard.updateTitle(getIngameTitle(ScoreboardType.WAITING));
+                        fastBoard.updateLines(getIngameLines(Bukkit.getPlayer(uuid), ScoreboardType.WAITING));
+                        return;
+                    }
+
+                    fastBoard.updateTitle(getIngameTitle(ScoreboardType.INGAME));
+                    fastBoard.updateLines(getIngameLines(Bukkit.getPlayer(uuid), ScoreboardType.INGAME));
+                    return;
+
+
                 });
             }
         },0,20);
     }
 
-    private static String getWaitingTitle() {
-        return ScoreboardType.WAITING.getTitle().replaceAll("&", "§");
+    private static String getLobbyTitle() {
+        return ScoreboardType.LOBBY.getTitle().replaceAll("&", "§");
     }
 
-    private static String getIngameTitle() {
-        return ScoreboardType.INGAME.getTitle()
+    private static String getIngameTitle(ScoreboardType type) {
+        return type.getTitle()
                 .replaceAll("%time%", TimeUtil.getFormattedTime(GameManager.getCurrentState().getTime()))
                 .replaceAll("&", "§");
     }
 
-    private static List<String> getWaitingLines() {
-        List<String> lines = new ArrayList<>(ScoreboardType.WAITING.getLines());
+    private static List<String> getLobbyLines() {
+        List<String> lines = new ArrayList<>(ScoreboardType.LOBBY.getLines());
         lines.replaceAll(string -> {
             return string
                     .replaceAll("&", "§")
+                    .replaceAll("%date%", TimeUtil.getFormattedDate())
                     .replaceAll("%time%", GameManager.getCurrentState().getTime()+"")
                     .replaceAll("%onlinePlayers%", GameManager.getOnlinePlayers().size()+"");
         });
         return lines;
     }
 
-    private static List<String> getIngameLines(Player player) {
-        List<String> lines = new ArrayList<>(ScoreboardType.INGAME.getLines());
+    private static List<String> getIngameLines(Player player, ScoreboardType type) {
+        List<String> lines = new ArrayList<>(type.getLines());
         lines.replaceAll(string -> {
             String s = string
                     .replaceAll("&", "§")
@@ -117,7 +129,14 @@ public class ScoreboardManager {
                     s = s.replaceAll("%island" + i + "%", "§7-");
                     continue;
                 }
-                Player ingamePlayer = GameManager.getOnlineAlivePlayers().get(i);
+                List<Player> donePlayers = GameManager.getOnlineAlivePlayers().stream().filter(PlayerManager::isPlayerDone).toList();
+                List<Player> buildingPlayers = GameManager.getOnlineAlivePlayers().stream().filter(onlinePlayer -> !PlayerManager.isPlayerDone(onlinePlayer)).toList();
+                Player ingamePlayer;
+                if (donePlayers.size() >= i + 1) {
+                    ingamePlayer = donePlayers.get(i);
+                } else {
+                    ingamePlayer = buildingPlayers.get(i - donePlayers.size());
+                }
                 s = s.replaceAll("%island" + i + "%", "§f" + ingamePlayer.getName()+": " + getIslandStatus(ingamePlayer));
             }
             return s;

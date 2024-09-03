@@ -7,7 +7,8 @@ public enum ConfigType {
     IMAGES,
     MAPS,
     HOTBARS,
-    SCOREBOARD
+    SCOREBOARD,
+    SETTINGS,
     ;
 
 }

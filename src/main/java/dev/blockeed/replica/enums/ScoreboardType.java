@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 public enum ScoreboardType {
 
+    LOBBY,
     WAITING,
     INGAME;
 

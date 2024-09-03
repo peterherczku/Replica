@@ -4,6 +4,7 @@ import dev.blockeed.replica.ReplicaPlugin;
 import dev.blockeed.replica.enums.HotbarType;
 import dev.blockeed.replica.enums.Messages;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -26,9 +27,8 @@ public class PlayerManager {
         resetPlayer(player);
         player.setAllowFlight(true);
         player.setFlying(true);
-        HotbarManager.getHotbar(HotbarType.SPECTATOR).setHotbar(player);
         player.getInventory().setArmorContents(null);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000, 1000));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 1000));
         GameManager.getOnlinePlayers().forEach(otherPlayer -> {
             if (!otherPlayer.getUniqueId().equals(player.getUniqueId())) {
                 if (PlayerManager.isSpectator(otherPlayer)) {
@@ -40,6 +40,7 @@ public class PlayerManager {
                 }
             }
         });
+        player.teleport(GameManager.getMap().getSpectatorLocation());
         MessageManager.sendMessage(Messages.SPECTATOR_MODE).send(player);
     }
 
@@ -84,6 +85,14 @@ public class PlayerManager {
 
     public static void clearDonePlayers() {
         donePlayers.clear();
+    }
+
+    public static void clearSpectators() {
+        spectators.clear();
+    }
+
+    public static List<Player> getSpectators() {
+        return spectators.stream().filter(spectator -> Bukkit.getPlayer(spectator) != null).map(Bukkit::getPlayer).toList();
     }
 
 }

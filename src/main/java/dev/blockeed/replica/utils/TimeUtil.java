@@ -9,10 +9,10 @@ public class TimeUtil {
         // Calculate minutes, seconds, and milliseconds
         long minutes = (millis / 1000) / 60;
         long seconds = (millis / 1000) % 60;
-        long milliseconds = millis % 1000;
+        double milliseconds = (millis % 1000) / 10.0;
 
         // Format the time to mm:ss.milliseconds
-        return String.format("%02d:%02d.%03d", minutes, seconds, milliseconds);
+        return String.format("%01d:%02d.%02.0f", minutes, seconds, milliseconds);
     }
 
     public static String getFormattedDate() {

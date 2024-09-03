@@ -7,14 +7,19 @@ import dev.blockeed.replica.managers.GameManager;
 import dev.blockeed.replica.managers.MessageManager;
 import dev.blockeed.replica.managers.PlayerManager;
 import dev.blockeed.replica.managers.TitleManager;
+import dev.blockeed.replica.utils.Settings;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class EndingState extends GameState {
 
     private Player winner;
 
     public EndingState(Player winner) {
-        super(30);
+        super(Settings.ENDING_TIME);
         this.winner = winner;
     }
 
@@ -30,6 +35,17 @@ public class EndingState extends GameState {
 
     @Override
     protected void onEnd() {
-
+        GameManager.restart();
     }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        event.setCancelled(true);
+    }
+
 }

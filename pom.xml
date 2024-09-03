@@ -62,6 +62,10 @@
               <!-- Replace 'com.yourpackage' with the package of your plugin ! -->
               <shadedPattern>dev.blockeed.fastboard</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>dev.jorel.commandapi</pattern>
+              <shadedPattern>dev.blockeed.commandapi</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
       </plugin>
@@ -94,9 +98,8 @@
     </dependency>
     <dependency>
       <groupId>dev.jorel</groupId>
-      <artifactId>commandapi-bukkit-core</artifactId>
-      <version>9.4.0</version>
-      <scope>provided</scope>
+      <artifactId>commandapi-bukkit-shade</artifactId>
+      <version>9.5.0</version>
     </dependency>
     <dependency>
       <groupId>fr.mrmicky</groupId>

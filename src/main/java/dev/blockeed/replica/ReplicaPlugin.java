@@ -3,7 +3,9 @@ package dev.blockeed.replica;
 import dev.blockeed.replica.commands.ReplicaCommand;
 import dev.blockeed.replica.events.handler.SelectionHandler;
 import dev.blockeed.replica.managers.*;
+import dev.blockeed.replica.utils.Settings;
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,6 +14,11 @@ public final class ReplicaPlugin extends JavaPlugin {
 
     @Getter
     private static ReplicaPlugin instance;
+
+    @Override
+    public void onLoad() {
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+    }
 
     @Override
     public void onEnable() {
@@ -24,6 +31,7 @@ public final class ReplicaPlugin extends JavaPlugin {
         HotbarManager.init();
         ScoreboardManager.loadScoreboards();
         ScoreboardManager.initScoreboard();
+        Settings.init();
         GameManager.init();
 
         registerCommands();
@@ -32,7 +40,8 @@ public final class ReplicaPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if (GameManager.isRunning()) GameManager.stop();
+        CommandAPI.onDisable();
     }
 
     private void registerHandlers() {
@@ -40,6 +49,7 @@ public final class ReplicaPlugin extends JavaPlugin {
     }
 
     private void registerCommands() {
+        CommandAPI.onEnable();
         CommandAPI.registerCommand(ReplicaCommand.class);
     }
 

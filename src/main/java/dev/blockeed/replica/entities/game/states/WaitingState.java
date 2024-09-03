@@ -8,12 +8,13 @@ import dev.blockeed.replica.managers.ImageManager;
 import dev.blockeed.replica.managers.ScoreboardManager;
 import dev.blockeed.replica.managers.TitleManager;
 import dev.blockeed.replica.utils.FrameUtil;
+import dev.blockeed.replica.utils.Settings;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 public class WaitingState extends GameState {
     public WaitingState() {
-        super(10);
+        super(Settings.WAITING_TIME);
     }
 
     @Override

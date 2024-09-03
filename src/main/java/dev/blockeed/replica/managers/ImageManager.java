@@ -38,7 +38,6 @@ public class ImageManager {
     public static void saveImage(Location frameTop, Location frameBottom) {
         if (!FrameUtil.isOneBlockWide(frameTop, frameBottom)) return;
         int size = FrameUtil.getSize(frameTop, frameBottom);
-        System.out.println(size);
         FileConfiguration configuration = ConfigManager.getConfig(ConfigType.IMAGES);
         ConfigurationSection imagesSection;
         if (configuration.isConfigurationSection("images")) imagesSection = configuration.getConfigurationSection("images");
@@ -63,7 +62,7 @@ public class ImageManager {
             if (!previousImages.contains(uuid)) imagesList.add(image);
         }));
         if (imagesList.isEmpty()) return null;
-        return imagesList.get(ThreadLocalRandom.current().nextInt(images.size()));
+        return imagesList.get(ThreadLocalRandom.current().nextInt(imagesList.size()));
     }
 
     public static Location getTopSelection(Player player) {

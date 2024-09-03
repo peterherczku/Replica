@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class GameState extends BukkitRunnable implements Listener {
 
     @Getter
-    private int time;
+    protected int time;
     private GeneralHandler generalHandler = new GeneralHandler();
 
     public GameState(int time) {

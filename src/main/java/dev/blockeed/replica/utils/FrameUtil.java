@@ -56,7 +56,6 @@ public class FrameUtil {
     public static List<Material> getBlocksInCuboid(Location frameTop, Location frameBottom) {
         List<Material> blocks = new ArrayList<>();
         for (Location location : getLocationsInCuboid(frameTop, frameBottom)) {
-            System.out.println(location.getBlock().getType());
             blocks.add(location.getBlock().getType());
         }
         return blocks;

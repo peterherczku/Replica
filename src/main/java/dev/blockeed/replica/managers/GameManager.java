@@ -9,6 +9,7 @@ import dev.blockeed.replica.entities.map.Island;
 import dev.blockeed.replica.entities.map.Map;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -38,10 +39,31 @@ public class GameManager {
         setState(new LobbyState());
     }
 
+    public static void stop() {
+        if (!isRunning()) return;
+        getOnlinePlayers().forEach(player -> player.kick(Component.text("Az aréna újraindul")));
+        map = null;
+        players.clear();
+        previousImages.clear();
+        buildingStage = 0;
+        setState(null);
+        PlayerManager.clearSpectators();
+        PlayerManager.clearDonePlayers();
+    }
+
+    public static void restart() {
+        stop();
+        init();
+    }
+
+    public static boolean isRunning() {
+        return currentState != null;
+    }
+
     public static void setState(GameState state) {
         if (currentState != null) currentState.onDisable();
         currentState = state;
-        currentState.onEnable();
+        if (currentState != null) currentState.onEnable();
     }
 
     public static List<Player> getOnlinePlayers() {
@@ -74,13 +96,22 @@ public class GameManager {
         players.put(player.getUniqueId(), island);
     }
 
+    public static void removePlayer(Player player) {
+        if (!players.containsKey(player.getUniqueId())) return;
+
+    }
+
     public static void addPreviousImage(Image image) {
         previousImages.add(image);
     }
 
-    public static void checkWinner() {
+    public static void nextRound() {
         if (PlayerManager.getDonePlayers().size() == 1) {
             GameManager.setState(new EndingState(Bukkit.getPlayer(PlayerManager.getDonePlayers().keySet().stream().toList().get(0))));
+            return;
+        }
+        if (GameManager.getOnlineAlivePlayers().size() == 1) {
+            GameManager.setState(new EndingState(GameManager.getOnlineAlivePlayers().get(0)));
             return;
         }
         GameManager.setState(new WaitingState());

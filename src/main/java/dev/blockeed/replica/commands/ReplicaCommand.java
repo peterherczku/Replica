@@ -57,6 +57,18 @@ public class ReplicaCommand {
         MessageManager.sendMessage(Messages.SUCCESSFULLY_SET_MAP_NAME).send(player);
     }
 
+    @Subcommand("setlobby")
+    public static void setLobby(Player player) {
+        if (!mapBuilder.containsKey(player.getUniqueId())) {
+            MessageManager.sendMessage(Messages.YOU_HAVENT_STARTED_CREATING_AN_ARENA).send(player);
+            return;
+        }
+
+        Map.MapBuilder map = mapBuilder.get(player.getUniqueId());
+        map.lobbyLocation(player.getLocation());
+        MessageManager.sendMessage(Messages.SUCCESSFULLY_SET_LOBBY).send(player);
+    }
+
     @Subcommand("setspectator")
     public static void setSpectator(Player player) {
         if (!mapBuilder.containsKey(player.getUniqueId())) {
@@ -207,7 +219,7 @@ public class ReplicaCommand {
             return;
         }
         map.islands(islands.get(player.getUniqueId()));
-        if (map.getName() == null || map.getSpectatorLocation() == null) {
+        if (map.getName() == null || map.getSpectatorLocation() == null || map.getLobbyLocation() == null) {
             MessageManager.sendMessage(Messages.YOU_HAVENT_SET_UP_THE_ARENA_YET).send(player);
             return;
         }

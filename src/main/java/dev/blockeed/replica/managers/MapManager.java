@@ -21,6 +21,7 @@ public class MapManager {
 
         String mapName = mapSection.getString("name");
         List<Island> islands = new ArrayList<>();
+        Location lobbyLocation = ConfigManager.readLocation(mapSection.getConfigurationSection("lobbyLocation"));
         Location spectatorLocation = ConfigManager.readLocation(mapSection.getConfigurationSection("spectatorLocation"));
         for (String islandKey : mapSection.getConfigurationSection("islands").getKeys(false)) {
             ConfigurationSection islandSection = mapSection.getConfigurationSection("islands").getConfigurationSection(islandKey);
@@ -35,7 +36,7 @@ public class MapManager {
             Island island = new Island(uuid, spawnLocation, frameTopLocation, frameBottomLocation, buildingFrameTopLocation, buildingFrameBottomLocation, islandTopLocation, islandBottomLocation);
             islands.add(island);
         }
-        return new Map(id, mapName, islands, spectatorLocation);
+        return new Map(id, mapName, islands, lobbyLocation, spectatorLocation);
     }
 
     public static void writeMap(Map map) {
@@ -47,6 +48,7 @@ public class MapManager {
         ConfigurationSection mapSection = allMapsSection.createSection(map.getId());
         mapSection.set("name", map.getName());
         ConfigManager.saveLocation(map.getSpectatorLocation(), mapSection.createSection("spectatorLocation"));
+        ConfigManager.saveLocation(map.getLobbyLocation(), mapSection.createSection("lobbyLocation"));
         ConfigurationSection allIslandSection = mapSection.createSection("islands");
         map.getIslands().forEach(island -> {
             ConfigurationSection islandSection = allIslandSection.createSection(island.getUuid().toString());

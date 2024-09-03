@@ -7,10 +7,12 @@ import dev.blockeed.replica.enums.Messages;
 import dev.blockeed.replica.enums.Titles;
 import dev.blockeed.replica.managers.*;
 import dev.blockeed.replica.utils.FrameUtil;
+import dev.blockeed.replica.utils.Settings;
 import dev.blockeed.replica.utils.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -28,7 +30,7 @@ public class BuildingState extends GameState {
     private Image currentImage;
 
     public BuildingState(Image currentImage, int stage) {
-        super(120 - stage * 10);
+        super(Settings.INITIAL_BUILDING_TIME - stage * Settings.BUILDING_TIME_DECREMENT);
         this.currentImage = currentImage;
     }
 
@@ -57,6 +59,10 @@ public class BuildingState extends GameState {
     @Override
     public void onDisable() {
         super.onDisable();
+        GameManager.getIslands().forEach(island -> {
+            FrameUtil.getLocationsInCuboid(island.getFrameTop(), island.getFrameBottom()).forEach(location -> location.getBlock().setType(Material.AIR));
+            FrameUtil.getLocationsInCuboid(island.getBuildingFrameTop(), island.getBuildingFrameBottom()).forEach(location -> location.getBlock().setType(Material.AIR));
+        });
         GameManager.getOnlinePlayers().forEach(player -> {
             MessageManager.sendMessage(Messages.ROUND_HAS_ENDED).send(player);
             TitleManager.sendTitle(Titles.ROUND_HAS_ENDED).send(player);
@@ -69,8 +75,9 @@ public class BuildingState extends GameState {
         eliminatedPlayers.forEach(eliminatedPlayer -> {
             PlayerManager.setSpectator(eliminatedPlayer);
             MessageManager.sendMessage(Messages.YOU_HAVE_BEEN_ELIMINATED).send(eliminatedPlayer);
+            GameManager.getOnlineAlivePlayers().forEach(alivePlayer -> MessageManager.sendMessage(Messages.PLAYER_HAS_BEEN_ELIMINATED).setValue("player", eliminatedPlayer.getName()).send(alivePlayer));
         });
-        GameManager.checkWinner();
+        GameManager.nextRound();
     }
 
     @EventHandler
@@ -121,17 +128,21 @@ public class BuildingState extends GameState {
         Long completionInMillis = System.currentTimeMillis() - startTime;
         String time = TimeUtil.convertMillisToTimeFormat(completionInMillis);
         PlayerManager.setDonePlayer(player, completionInMillis);
-        MessageManager.sendMessage(Messages.SUCCESSFULLY_COMPLETED_THE_IMAGE).setValue("time", time).send(player);
+        GameManager.getOnlinePlayers().forEach(onlinePlayer -> {
+            MessageManager.sendMessage(Messages.PLAYER_COMPLETED_THE_IMAGE).setValue("time", time).setValue("player", player.getName()).send(onlinePlayer);
+        });
         TitleManager.sendTitle(Titles.SUCCESSFULLY_COMPLETED_THE_IMAGE).setValue("time", time).send(player);
+        player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 
         if (GameManager.getOnlineAlivePlayers().size() == 1) {
-            GameManager.checkWinner();
+            GameManager.nextRound();
             return;
         }
         if (PlayerManager.getDonePlayers().size() != GameManager.getOnlineAlivePlayers().size() - 1) return;
         Player eliminatedPlayer = GameManager.getOnlineAlivePlayers().stream().filter(p -> !PlayerManager.isPlayerDone(p)).findAny().get();
         PlayerManager.setSpectator(eliminatedPlayer);
         MessageManager.sendMessage(Messages.YOU_HAVE_BEEN_ELIMINATED).send(eliminatedPlayer);
-        GameManager.checkWinner();
+        GameManager.getOnlineAlivePlayers().forEach(alivePlayer -> MessageManager.sendMessage(Messages.PLAYER_HAS_BEEN_ELIMINATED).setValue("player", eliminatedPlayer.getName()).send(alivePlayer));
+        GameManager.nextRound();
     }
 }

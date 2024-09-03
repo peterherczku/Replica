@@ -1,0 +1,8 @@
+settings:
+  minimumPlayers: 2
+  time:
+    lobby: 15
+    waiting: 5
+    initialBuilding: 90
+    buildingDecrement: 10
+    ending: 15

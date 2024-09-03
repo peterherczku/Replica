@@ -13,9 +13,15 @@ public class Map {
     private String id;
     private String name;
     private List<Island> islands;
+    private Location lobbyLocation;
     private Location spectatorLocation;
 
     public static class MapBuilder {
+
+        public Location getLobbyLocation() {
+            return lobbyLocation;
+        }
+
         public Location getSpectatorLocation() {
             return spectatorLocation;
         }
