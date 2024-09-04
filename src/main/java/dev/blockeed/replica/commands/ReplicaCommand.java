@@ -2,17 +2,22 @@ package dev.blockeed.replica.commands;
 
 import dev.blockeed.replica.entities.map.Island;
 import dev.blockeed.replica.entities.map.Map;
+import dev.blockeed.replica.enums.ConfigType;
 import dev.blockeed.replica.enums.Messages;
+import dev.blockeed.replica.managers.ConfigManager;
 import dev.blockeed.replica.managers.ImageManager;
 import dev.blockeed.replica.managers.MapManager;
 import dev.blockeed.replica.managers.MessageManager;
 import dev.blockeed.replica.utils.FrameUtil;
+import dev.blockeed.replica.utils.Settings;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
 import dev.jorel.commandapi.annotations.Subcommand;
+import dev.jorel.commandapi.annotations.arguments.ABooleanArgument;
 import dev.jorel.commandapi.annotations.arguments.AStringArgument;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -28,6 +33,15 @@ public class ReplicaCommand {
     @Default
     public static void replica(Player player) {
         sendHelp(player);
+    }
+
+    @Subcommand("setproduction")
+    public static void setProduction(Player player, @ABooleanArgument Boolean value) {
+        FileConfiguration configuration = ConfigManager.getConfig(ConfigType.SETTINGS);
+        configuration.getConfigurationSection("settings").set("production", value);
+        ConfigManager.saveConfig(ConfigType.SETTINGS);
+        Settings.PRODUCTION = true;
+        MessageManager.sendMessage(Messages.YOU_HAVE_SUCCESSFULLY_SET_PRODUCTION_TO).setValue("value", value.toString()).send(player);
     }
 
     @Subcommand("createarena")

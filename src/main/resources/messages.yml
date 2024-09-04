@@ -23,6 +23,7 @@ messages:
     - "&fCreated by: &7blockeed (Discord: @blockeed)"
     - ""
     - "&7&m-----------------------------------------"
+  YOU_HAVE_SUCCESSFULLY_SET_PRODUCTION_TO: "&aSikeresen beállítottad a production értéket erre: &f%value%"
   HAVENT_SELECTED_AN_EDGE: "&7Nem választottad ki az egyik sarkát a kijelölésnek!"
   YOUR_SELECTION_IS_NOT_IN_ONE_PLANE: "&7A kijelölésed két sarka nem esik egy síkba!"
   SUCCESSFULLY_SAVED_IMAGE: "&aSikeresen elmentetted a képet!"

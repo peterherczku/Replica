@@ -7,6 +7,7 @@ import dev.blockeed.replica.utils.Settings;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import lombok.Getter;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,10 +33,13 @@ public final class ReplicaPlugin extends JavaPlugin {
         ScoreboardManager.loadScoreboards();
         ScoreboardManager.initScoreboard();
         Settings.init();
-        GameManager.init();
 
         registerCommands();
         registerHandlers();
+        setupMetrics();
+
+        if (!Settings.PRODUCTION) return;
+        GameManager.start();
     }
 
     @Override
@@ -51,6 +55,11 @@ public final class ReplicaPlugin extends JavaPlugin {
     private void registerCommands() {
         CommandAPI.onEnable();
         CommandAPI.registerCommand(ReplicaCommand.class);
+    }
+
+    private void setupMetrics() {
+        int pluginId = 23281;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
 }

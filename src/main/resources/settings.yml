@@ -1,4 +1,6 @@
 settings:
+  production: false
+  defaultMap: replica
   minimumPlayers: 2
   time:
     lobby: 15

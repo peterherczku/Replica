@@ -7,6 +7,7 @@ import dev.blockeed.replica.entities.game.states.WaitingState;
 import dev.blockeed.replica.entities.images.Image;
 import dev.blockeed.replica.entities.map.Island;
 import dev.blockeed.replica.entities.map.Map;
+import dev.blockeed.replica.utils.Settings;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
@@ -32,8 +33,8 @@ public class GameManager {
     @Getter @Setter
     private static int buildingStage = 0;
 
-    public static void init() {
-        map = MapManager.loadMap("replica");
+    public static void start() {
+        map = MapManager.loadMap(Settings.DEFAULT_MAP);
         if (map == null) return;
         players = new HashMap<>();
         setState(new LobbyState());
@@ -53,7 +54,7 @@ public class GameManager {
 
     public static void restart() {
         stop();
-        init();
+        start();
     }
 
     public static boolean isRunning() {

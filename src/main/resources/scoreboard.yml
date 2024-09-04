@@ -2,7 +2,7 @@ scoreboards:
   LOBBY:
     title: "&a&lREPLICA"
     lines:
-      - "  &7%date%"
+      - "   &7%date%"
       - ""
       - "&fJátékosok: &a%onlinePlayers%"
       - ""
@@ -12,9 +12,9 @@ scoreboards:
   WAITING:
     title: "&a&lREPLICA"
     lines:
-      - "  &7%date%"
+      - "   &7%date%"
       - ""
-      - "&fKövetkező kör: &7%time%"
+      - "&fKöv. kör: &7%time%"
       - ""
       - "&a● %island0%"
       - "&a● %island1%"
@@ -26,7 +26,7 @@ scoreboards:
   INGAME:
     title: "&a&lREPLICA"
     lines:
-      - "  &7%date%"
+      - "   &7%date%"
       - ""
       - "&fKör vége: &7%time%"
       - ""

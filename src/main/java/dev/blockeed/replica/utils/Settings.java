@@ -13,12 +13,16 @@ public class Settings {
     public static int BUILDING_TIME_DECREMENT = 10;
     public static int ENDING_TIME = 10;
     public static int MIN_PLAYERS = 2;
+    public static boolean PRODUCTION = false;
+    public static String DEFAULT_MAP = "replica";
 
     public static void init() {
         FileConfiguration configuration = ConfigManager.getConfig(ConfigType.SETTINGS);
         if (!configuration.isConfigurationSection("settings")) return;
         ConfigurationSection settings = configuration.getConfigurationSection("settings");
         MIN_PLAYERS = settings.getInt("minimumPlayers");
+        PRODUCTION = settings.getBoolean("production");
+        DEFAULT_MAP = settings.getString("defaultMap");
         if (!configuration.isConfigurationSection("time")) return;
         ConfigurationSection time = configuration.getConfigurationSection("time");
         LOBBY_TIME = time.getInt("lobby");
